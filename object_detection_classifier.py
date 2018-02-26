@@ -64,10 +64,7 @@ class ObjectDetectionClassifier(object):
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
         return detection_graph
-
-    def classify_image(self, image):
-        self.current_light = UNKNOWN
-
+    def detect_object(self, image):
         image_expanded = np.expand_dims(image, axis=0)
         with self.detection_graph.as_default():
             (boxes, scores, classes, num) = self.sess.run(
@@ -78,6 +75,13 @@ class ObjectDetectionClassifier(object):
         boxes = np.squeeze(boxes)
         scores = np.squeeze(scores)
         classes = np.squeeze(classes).astype(np.int32)
+
+        return boxes, scores, classes
+
+    def classify_image(self, image):
+        self.current_light = UNKNOWN
+        (boxes, scores, classes) = self.detect_object(image)
+
 
         for i in range(boxes.shape[0]):
             if scores is None or scores[i] > MIN_SCORE_THRESHOLD:
@@ -90,10 +94,6 @@ class ObjectDetectionClassifier(object):
                     self.current_light = YELLOW
                 self.image_np_deep = image
 
-
-
-        # ymin, xmin, ymax, xmax = box
-        # depth_prime = (width_real * focal) / perceived_width
         if self.fx and self.fy:
             perceived_width_x = (boxes[i][3] - boxes[i][1]) * 800
             perceived_width_y = (boxes[i][2] - boxes[i][0]) * 600
@@ -104,3 +104,19 @@ class ObjectDetectionClassifier(object):
             print("Distance (metres)", estimated_distance)
 
         return self.current_light
+
+    @staticmethod
+    def load_image_into_numpy_array(image):
+        (im_width, im_height) = image.size
+        return np.array(image.getdata()).reshape(
+            (im_height, im_width, 3)).astype(np.uint8)
+
+    def visualize_detection(self, image):
+        (boxes, scores, classes) = self.detect_object(image)
+        image_np = ObjectDetectionClassifier.load_image_into_numpy_array(image)
+        visualization_utils.visualize_boxes_and_labels_on_image_array(
+            image_np, boxes, classes, scores,
+            self.category_index,
+            use_normalized_coordinates=True,
+            line_thickness=6)
+        return image_np
