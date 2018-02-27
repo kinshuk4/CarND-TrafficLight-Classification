@@ -64,6 +64,7 @@ class ObjectDetectionClassifier(object):
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
         return detection_graph
+
     def detect_object(self, image):
         image_expanded = np.expand_dims(image, axis=0)
         with self.detection_graph.as_default():
@@ -81,7 +82,6 @@ class ObjectDetectionClassifier(object):
     def classify_image(self, image):
         self.current_light = UNKNOWN
         (boxes, scores, classes) = self.detect_object(image)
-
 
         for i in range(boxes.shape[0]):
             if scores is None or scores[i] > MIN_SCORE_THRESHOLD:
