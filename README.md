@@ -2,10 +2,10 @@
 
 ## Step 1 - Get the Data
 
-1. Gather the data - We have 2 sets of data - simulator and real world data. 
+1. Gather the data - We have 2 sets of data - simulator and real-world data. 
 2. Label and annotate the data
 
-We will come to download the data set on step 4 - create the TFRecord.
+We will come to download the dataset in step 4 - create the TFRecord.
 
 ## Step 2 - Setup the tensorflow models
 
