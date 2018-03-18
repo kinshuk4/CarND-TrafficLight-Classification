@@ -121,6 +121,46 @@ Now for all the models, we do following steps:
 
 `python object_detection/export_inference_graph.py --pipeline_config_path=config/ssd_inception-traffic_udacity_real.config --trained_checkpoint_prefix=data/real_training_data/model.ckpt-10000 --output_directory=frozen_models/frozen_real_inception/`
 
+### Use Faster-RCNN model
+
+#### For Simulator Data - Training
+
+`python object_detection/train.py --pipeline_config_path=config/faster_rcnn-traffic-udacity_sim.config --train_dir=data/sim_training_data/sim_data_capture`
+
+#### For Simulator Data - Saving for Inference
+
+`python object_detection/export_inference_graph.py --pipeline_config_path=config/faster_rcnn-traffic-udacity_sim.config --trained_checkpoint_prefix=data/sim_training_data/sim_data_capture/model.ckpt-5000 --output_directory=frozen_sim/`
+
+#### For Real Data - Training
+
+`python object_detection/train.py --pipeline_config_path=config/faster_rcnn-traffic_udacity_real.config --train_dir=data/real_training_data`
+
+#### For Real Data - Saving for Inference
+
+`python object_detection/export_inference_graph.py --pipeline_config_path=config/faster_rcnn-traffic_udacity_real.config --trained_checkpoint_prefix=data/real_training_data/model.ckpt-10000 --output_directory=frozen_real/`
+
+### Use MobileNet SSD v1
+
+(Due to some unknown reasons the model gets trained but does not save for inference. Ignoring this for now.)
+
+#### For Simulator Data - Training
+
+`python object_detection/train.py --pipeline_config_path=config/ssd_mobilenet-traffic-udacity_sim.config --train_dir=data/sim_training_data/sim_data_capture`
+
+#### For Simulator Data - Saving for Inference
+
+`python object_detection/export_inference_graph.py --pipeline_config_path=config/ssd_mobilenet-traffic-udacity_sim.config --trained_checkpoint_prefix=data/sim_training_data/sim_data_capture/model.ckpt-5000 --output_directory=frozen_models/frozen_sim_mobile/`
+
+#### For Real Data - Training
+
+`python object_detection/train.py --pipeline_config_path=config/ssd_mobilenet-traffic_udacity_real.config --train_dir=data/real_training_data`
+
+#### For Real Data - Saving for Inference
+
+`python object_detection/export_inference_graph.py --pipeline_config_path=config/ssd_mobilenet-traffic_udacity_real.config --trained_checkpoint_prefix=data/real_training_data/model.ckpt-10000 --output_directory=frozen_models/frozen_real_mobile/`
+
+
+
 ### Test the Model
 
 Working on it.
